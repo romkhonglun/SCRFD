@@ -13,6 +13,6 @@ pip install -r requirements.txt
 ## Contribution
 Nguyen Huu Cong 20225476: Implement SCRFD model and provide pretrained model.
 # References
-[1] [MMDetection](https://github.com/open-mmlab/mmcv)\
+[1] [SCRFD Original Paper](https://arxiv.org/pdf/2105.04714)\
 [2] [InsightFace](https://github.com/deepinsight/insightface/tree/master)\
-[3] [SCRFD Original Paper](https://arxiv.org/pdf/2105.04714)
+[3] [MMDetection](https://github.com/open-mmlab/mmcv)\
