@@ -541,13 +541,13 @@ def get_widerface_gts(gt_path):
     return all_results
 
 
-if __name__ == '__main__':
-    parser = argparse.ArgumentParser()
-    parser.add_argument('-p', '--pred', default='')
-    parser.add_argument('-g', '--gt', default='./ground_truth/')
-
-    args = parser.parse_args()
-    evaluation(args.pred, args.gt)
+# if __name__ == '__main__':
+#     parser = argparse.ArgumentParser()
+#     parser.add_argument('-p', '--pred', default='')
+#     parser.add_argument('-g', '--gt', default='./ground_truth/')
+#
+#     args = parser.parse_args()
+#     evaluation(args.pred, args.gt)
 
 
 
