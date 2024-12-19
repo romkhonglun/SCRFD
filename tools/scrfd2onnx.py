@@ -10,6 +10,7 @@ import torch
 from mmdet.core import (build_model_from_cfg, generate_inputs_and_wrap_model,
                         preprocess_example_input)
 
+
 #from mmdet.models import build
 
 def pytorch2onnx(config_path,
@@ -20,12 +21,11 @@ def pytorch2onnx(config_path,
                  show=False,
                  output_file='tmp.onnx',
                  verify=False,
-                 simplify = True,
-                 dynamic = True,
+                 simplify=True,
+                 dynamic=True,
                  normalize_cfg=None,
                  dataset='coco',
                  test_img=None):
-
     input_config = {
         'input_shape': input_shape,
         'input_path': input_img,
@@ -36,7 +36,7 @@ def pytorch2onnx(config_path,
     # remove optimizer for smaller file size
     if 'optimizer' in checkpoint:
         del checkpoint['optimizer']
-        tmp_ckpt_file = checkpoint_path+"_slim.pth"
+        tmp_ckpt_file = checkpoint_path + "_slim.pth"
         torch.save(checkpoint, tmp_ckpt_file)
         print('remove optimizer params and save to', tmp_ckpt_file)
         checkpoint_path = tmp_ckpt_file
@@ -48,7 +48,7 @@ def pytorch2onnx(config_path,
         os.remove(tmp_ckpt_file)
 
     if simplify or dynamic:
-        ori_output_file = output_file.split('.')[0]+"_ori.onnx"
+        ori_output_file = output_file.split('.')[0] + "_ori.onnx"
     else:
         ori_output_file = output_file
 
@@ -90,14 +90,13 @@ def pytorch2onnx(config_path,
             from onnxsim import simplify
             #print(model.graph.input[0])
             if dynamic:
-                input_shapes = {model.graph.input[0].name : list(input_shape)}
+                input_shapes = {model.graph.input[0].name: list(input_shape)}
                 model, check = simplify(model, input_shapes=input_shapes, dynamic_input_shape=True)
             else:
                 model, check = simplify(model)
             assert check, "Simplified ONNX model could not be validated"
         onnx.save(model, output_file)
         os.remove(ori_output_file)
-
 
     print(f'Successfully exported ONNX model: {output_file}')
 
@@ -164,15 +163,15 @@ if __name__ == '__main__':
 
     simplify = True
     dynamic = False
-    if input_shape[2]<=0 or input_shape[3]<=0:
-        input_shape = (1,3,640,640)
+    if input_shape[2] <= 0 or input_shape[3] <= 0:
+        input_shape = (1, 3, 640, 640)
         dynamic = True
         #simplify = False
         print('set to dynamic input with dummy shape:', input_shape)
 
     normalize_cfg = {'mean': args.mean, 'std': args.std}
 
-    if len(args.output_file)==0:
+    if len(args.output_file) == 0:
         output_dir = osp.join(osp.dirname(__file__), '../onnx')
         if not osp.exists(output_dir):
             os.makedirs(output_dir)
@@ -180,9 +179,9 @@ if __name__ == '__main__':
         pos = cfg_name.rfind('.')
         cfg_name = cfg_name[:pos]
         if dynamic:
-            args.output_file = osp.join(output_dir, "%s.onnx"%cfg_name)
+            args.output_file = osp.join(output_dir, "%s.onnx" % cfg_name)
         else:
-            args.output_file = osp.join(output_dir, "%s_shape%dx%d.onnx"%(cfg_name,input_shape[2],input_shape[3]))
+            args.output_file = osp.join(output_dir, "%s_shape%dx%d.onnx" % (cfg_name, input_shape[2], input_shape[3]))
 
     # convert model to onnx file
     pytorch2onnx(
@@ -194,8 +193,8 @@ if __name__ == '__main__':
         show=args.show,
         output_file=args.output_file,
         verify=args.verify,
-        simplify = simplify,
-        dynamic = dynamic,
+        simplify=simplify,
+        dynamic=dynamic,
         normalize_cfg=normalize_cfg,
         dataset=args.dataset,
         test_img=args.test_img)
